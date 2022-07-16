@@ -6,6 +6,8 @@ import os
 
 from django.shortcuts import render
 
+from mainapp.models import Products, ProductCategory
+
 MODULE_DIR = os.path.dirname(__file__)
 
 
@@ -21,12 +23,7 @@ def products(request):
     context = {
         'title': 'Soapshop - Каталог',
     }
-    context['products'] = json.load(open(file_path, encoding='utf-8'))
-    context['categories'] = [
-        'Новинки',
-        'Одежда',
-        'Обувь',
-        'Аксессуары',
-        'Подарки',
-    ]
+    # context['products'] = json.load(open(file_path, encoding='utf-8'))
+    context['products'] = Products.objects.all()
+    context['categories'] = ProductCategory.objects.all()
     return render(request, 'mainapp/products.html', context)
