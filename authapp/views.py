@@ -48,6 +48,7 @@ def register(request):
     }
     return render(request, 'authapp/register.html', context)
 
+
 @login_required
 def profile(request):
     if request.method == "POST":
@@ -56,10 +57,18 @@ def profile(request):
             form.save()
         else:
             print(form.errors)
+    total_quantity = 0
+    total_sum = 0
+    baskets = Basket.objects.filter(user=request.user)
+    for basket in baskets:
+        total_quantity += basket.quantity
+        total_sum = basket.sum()
     context = {
         'title': 'Soapshop | Профиль',
         'form': UserProfileForm(instance=request.user),
-        'baskets': Basket.objects.filter(user=request.user),
+        'baskets': baskets,
+        'total_quantity': total_quantity,
+        'total_sum': total_sum,
     }
     return render(request, 'authapp/profile.html', context)
 
